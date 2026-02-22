@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: ai-text-speech
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+
+app:
+  blocked-words:
+    - umm
+    - ahhh
+    - youknow
+    - badword1
+    - badword2
+
+ninjas:
+  api:
+    key: ${NINJAS_API_KEY}

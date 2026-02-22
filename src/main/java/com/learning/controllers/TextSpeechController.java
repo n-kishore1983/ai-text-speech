@@ -47,12 +47,18 @@ public class TextSpeechController {
         }
 
         try {
-            ImagePayload transcribedText = aiService.convertAudioToText(file, conversionType);
-            return ResponseEntity.ok()
-                    .contentType(MediaType.IMAGE_PNG)
-                    .header(HttpHeaders.CONTENT_DISPOSITION,
-                            "attachment; filename=\"qrcode.png\"")
-                    .body(Base64.getDecoder().decode(transcribedText.base64()));
+            ImagePayload imagePayload = aiService.convertAudioToText(file, conversionType);
+            if(imagePayload.mediaType().equals("image/png")) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_PNG)
+                        .header(HttpHeaders.CONTENT_DISPOSITION,
+                                "attachment; filename=\"qrcode.png\"")
+                        .body(Base64.getDecoder().decode(imagePayload.base64()));
+            } else {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(imagePayload.base64().getBytes());
+            }
         } catch (Exception e) {
             return ResponseEntity.internalServerError()
                     .body("Failed to transcribe audio: " .getBytes());
